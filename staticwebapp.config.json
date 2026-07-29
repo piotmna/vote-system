@@ -1,0 +1,6 @@
+{
+  "navigationFallback": {
+    "rewrite": "/vote.html",
+    "exclude": ["/api/*"]
+  }
+}
