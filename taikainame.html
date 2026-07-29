@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>大会一覧</title>
+</head>
+<body>
+  <h2>大会一覧</h2>
+  <div id="tournaments"></div>
+
+  <script>
+    async function loadTournaments() {
+      const res = await fetch("/api/tournaments");
+      const data = await res.json();
+
+      const div = document.getElementById("tournaments");
+      div.innerHTML = data.map(t => `
+        <div>
+          <strong>${t.TournamentName}</strong>
+          <button onclick="goVote(${t.TournamentId})">投票する</button>
+        </div>
+      `).join("");
+    }
+
+    function goVote(id) {
+      window.location.href = `vote.html?t=${id}`;
+    }
+
+    loadTournaments();
+  </script>
+</body>
+</html>

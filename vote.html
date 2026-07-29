@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>国に投票</title>
+</head>
+<body>
+  <h2>国に投票</h2>
+
+  <div>
+    国：
+    <select id="country"></select>
+  </div>
+
+  <div>
+    金額：
+    <input type="number" id="amount" min="1">
+  </div>
+
+  <button onclick="submitVote()">投票する</button>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const tournamentId = urlParams.get("t");
+
+    async function loadCountries() {
+      const res = await fetch("/api/countries");
+      const data = await res.json();
+
+      const sel = document.getElementById("country");
+      sel.innerHTML = data.map(c =>
+        `<option value="${c.CountryId}">${c.CountryName}</option>`
+      ).join("");
+    }
+
+    async function submitVote() {
+      const countryId = document.getElementById("country").value;
+      const amount = document.getElementById("amount").value;
+
+      const res = await fetch("/api/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          TournamentId: Number(tournamentId),
+          CountryId: Number(countryId),
+          BetAmount: Number(amount)
+        })
+      });
+
+      const result = await res.json();
+      alert("投票完了：" + JSON.stringify(result));
+    }
+
+    loadCountries();
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>払い戻し結果</title>
+</head>
+<body>
+  <h2>払い戻し結果</h2>
+
+  <div>
+    大会ID：
+    <input type="number" id="tournamentId">
+    <button onclick="loadPayout()">表示</button>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    async function loadPayout() {
+      const tId = document.getElementById("tournamentId").value;
+
+      const res = await fetch(`/api/payout/me/${tId}`);
+      const data = await res.json();
+
+      document.getElementById("result").innerHTML = `
+        <p>総投票額：${data.TotalBet} 円</p>
+        <p>総払い戻し：${data.TotalPayout} 円</p>
+      `;
+    }
+  </script>
+</body>
+</html>
